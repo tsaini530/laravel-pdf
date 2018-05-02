@@ -45,6 +45,10 @@ class Pdf {
 		$this->mpdf->SetSubject       ( $this->getConfig('subject') );
 		$this->mpdf->SetKeywords      ( $this->getConfig('keywords') );
 		$this->mpdf->SetDisplayMode   ( $this->getConfig('display_mode') );
+		$this->mpdf->SetWatermarkText ( $this->getConfig('watermark') );
+		$this->mpdf->showWatermarkText  = $this->getConfig('show_watermark');
+		$this->mpdf->watermark_font     = $this->getConfig('watermark_font');
+		$this->mpdf->watermarkTextAlpha = $this->getConfig('watermark_text_alpha');
 
 		$this->mpdf->WriteHTML($html);
 	}
@@ -90,6 +94,19 @@ class Pdf {
 			$ownerPassword = bin2hex(openssl_random_pseudo_bytes(8));
 		};
 		return $this->mpdf->SetProtection($permisson, $userPassword, $ownerPassword);
+	}
+	/**
+	 * Sets a watermark text for the PDF
+	 *
+	 * @param string $text Text for watermark
+	 * @param string $alpha Transparency of the text
+	 * @return static
+	 *
+	 */
+	public function setWatermarkText($text, $alpha = 0.2)
+	{
+		$this->mpdf->showWatermarkText = true;
+		return $this->mpdf->SetWatermarkText($text, $alpha);
 	}
 
 	/**
